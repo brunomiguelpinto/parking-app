@@ -1,0 +1,105 @@
+<div class="mb-8">
+  <h1 class="page-title">Reservas</h1>
+  <p class="text-sm text-gray-500 mt-1">Gere e aprova as reservas de estacionamento</p>
+</div>
+
+<% if @pending.any? %>
+  <div class="mb-8">
+    <div class="flex items-center gap-2 mb-4">
+      <h2 class="section-title">Pendentes para amanha</h2>
+      <span class="badge-pending"><%= @pending.count %></span>
+      <span class="text-sm text-gray-400"><%= Date.tomorrow.strftime("%d/%m/%Y") %></span>
+    </div>
+
+    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <% @pending.each do |reservation| %>
+        <div class="card p-5">
+          <div class="flex items-start justify-between mb-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-sm font-bold text-amber-700">
+                <%= reservation.user.name[0].upcase %>
+              </div>
+              <div>
+                <p class="font-semibold text-gray-900 text-sm"><%= reservation.user.name %></p>
+                <p class="text-xs text-gray-400"><%= reservation.user.email %></p>
+              </div>
+            </div>
+            <span class="badge-pending">Pendente</span>
+          </div>
+          <div class="flex items-center gap-4 text-sm text-gray-600 mb-4">
+            <span class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
+              <span class="font-semibold">Lugar <%= reservation.parking_spot.name %></span>
+            </span>
+            <span class="font-mono text-gray-500"><%= reservation.license_plate %></span>
+          </div>
+          <div class="flex gap-2">
+            <%= button_to "Aprovar", approve_admin_reservation_path(reservation), method: :patch, class: "btn-success flex-1" %>
+            <%= button_to "Rejeitar", reject_admin_reservation_path(reservation), method: :patch, class: "btn-danger flex-1" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<div>
+  <h2 class="section-title mb-4">Todas as Reservas</h2>
+  <% if @all_reservations.any? %>
+    <div class="card overflow-hidden">
+      <table class="w-full">
+        <thead>
+          <tr class="border-b border-gray-100 bg-gray-50/50">
+            <th class="table-header">Data</th>
+            <th class="table-header">Utilizador</th>
+            <th class="table-header">Lugar</th>
+            <th class="table-header">Matricula</th>
+            <th class="table-header">Estado</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <% @all_reservations.each do |reservation| %>
+            <tr class="hover:bg-gray-50/50 transition duration-150">
+              <td class="table-cell font-medium text-gray-900"><%= reservation.date.strftime("%d/%m/%Y") %></td>
+              <td class="table-cell">
+                <div class="flex items-center gap-2">
+                  <div class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-500">
+                    <%= reservation.user.name[0].upcase %>
+                  </div>
+                  <%= reservation.user.name %>
+                </div>
+              </td>
+              <td class="table-cell">
+                <span class="inline-flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
+                  <span class="font-semibold"><%= reservation.parking_spot.name %></span>
+                </span>
+              </td>
+              <td class="table-cell font-mono text-gray-500"><%= reservation.license_plate %></td>
+              <td class="table-cell">
+                <% case reservation.status %>
+                <% when "pending" %>
+                  <span class="badge-pending">Pendente</span>
+                <% when "approved" %>
+                  <span class="badge-approved">Aprovada</span>
+                <% when "rejected" %>
+                  <span class="badge-rejected">Rejeitada</span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="empty-state">
+      <div class="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+        </svg>
+      </div>
+      <p class="text-lg font-semibold text-gray-900">Sem reservas</p>
+      <p class="text-sm text-gray-500 mt-1">As reservas aparecerao aqui quando os utilizadores as fizerem.</p>
+    </div>
+  <% end %>
+</div>

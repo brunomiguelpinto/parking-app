@@ -1,0 +1,87 @@
+<% content_for(:page_heading, "Meu Perfil") %>
+
+<div class="mt-2 max-w-xl space-y-6">
+  <%= render "shared/errors", object: @user %>
+
+  <%= form_with model: @user, url: profile_path, method: :patch, class: "space-y-6" do |f| %>
+    <%# Dados Pessoais %>
+    <div class="bg-white rounded-2xl border border-gray-100 p-6">
+      <div class="flex items-center gap-3 mb-5">
+        <div class="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center">
+          <svg class="w-5 h-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-base font-semibold text-gray-900">Dados Pessoais</h3>
+          <p class="text-xs text-gray-500">O teu nome e informacoes de conta</p>
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nome</label>
+        <%= f.text_field :name, class: "w-full border border-gray-300 rounded-xl px-4 py-3 text-sm bg-gray-50 placeholder-gray-400 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" %>
+      </div>
+    </div>
+
+    <%# Dados do Carro %>
+    <div class="bg-white rounded-2xl border border-gray-100 p-6">
+      <div class="flex items-center gap-3 mb-5">
+        <div class="w-10 h-10 bg-violet-50 rounded-xl flex items-center justify-center">
+          <svg class="w-5 h-5 text-violet-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-base font-semibold text-gray-900">Dados do Carro</h3>
+          <p class="text-xs text-gray-500">A matricula sera preenchida automaticamente nas reservas</p>
+        </div>
+      </div>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Matricula</label>
+          <%= f.text_field :license_plate, class: "w-full border border-gray-300 rounded-xl px-4 py-3 text-sm bg-gray-50 font-mono uppercase placeholder-gray-400 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition", placeholder: "AA-00-BB" %>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Marca</label>
+            <%= f.text_field :car_brand, class: "w-full border border-gray-300 rounded-xl px-4 py-3 text-sm bg-gray-50 placeholder-gray-400 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition", placeholder: "Ex: Toyota" %>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1.5">Modelo</label>
+            <%= f.text_field :car_model, class: "w-full border border-gray-300 rounded-xl px-4 py-3 text-sm bg-gray-50 placeholder-gray-400 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition", placeholder: "Ex: Yaris" %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%# Password %>
+    <div class="bg-white rounded-2xl border border-gray-100 p-6">
+      <div class="flex items-center gap-3 mb-5">
+        <div class="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center">
+          <svg class="w-5 h-5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-base font-semibold text-gray-900">Alterar Password</h3>
+          <p class="text-xs text-gray-500">Deixa em branco para manter a password atual</p>
+        </div>
+      </div>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nova Password</label>
+          <%= f.password_field :password, class: "w-full border border-gray-300 rounded-xl px-4 py-3 text-sm bg-gray-50 placeholder-gray-400 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" %>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Confirmar Password</label>
+          <%= f.password_field :password_confirmation, class: "w-full border border-gray-300 rounded-xl px-4 py-3 text-sm bg-gray-50 placeholder-gray-400 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition" %>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex gap-3">
+      <%= f.submit "Guardar Alteracoes", class: "inline-flex items-center px-5 py-2.5 bg-indigo-600 text-white text-sm font-semibold rounded-xl shadow-sm hover:bg-indigo-700 transition cursor-pointer" %>
+      <%= link_to "Cancelar", root_path, class: "inline-flex items-center px-5 py-2.5 bg-white text-gray-700 text-sm font-semibold rounded-xl border border-gray-300 shadow-sm hover:bg-gray-50 transition" %>
+    </div>
+  <% end %>
+</div>
