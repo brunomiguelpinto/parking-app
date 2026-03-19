@@ -6,18 +6,18 @@
     <p class="text-sm text-gray-500 mt-1">Seleciona um lugar disponivel e confirma a tua matricula.</p>
   </div>
 
-  <div class="bg-white rounded-2xl border border-gray-100 p-6">
+  <div class="bg-white rounded-2xl border border-gray-100 p-4 sm:p-6">
     <%= render "shared/errors", object: @reservation %>
 
     <%= form_with model: @reservation, class: "space-y-6" do |f| %>
       <div>
         <label class="block text-sm font-semibold text-gray-700 mb-3">Lugar de Estacionamento</label>
         <% if @available_spots.any? %>
-          <div class="grid grid-cols-3 sm:grid-cols-4 gap-2.5">
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5">
             <% @available_spots.each do |spot| %>
               <label class="relative cursor-pointer group">
                 <%= f.radio_button :parking_spot_id, spot.id, class: "peer sr-only" %>
-                <div class="flex flex-col items-center justify-center p-4 rounded-xl border-2 border-gray-200 bg-white text-sm font-bold text-gray-600 peer-checked:border-indigo-600 peer-checked:bg-indigo-50 peer-checked:text-indigo-700 group-hover:border-gray-300 group-hover:bg-gray-50 transition">
+                <div class="flex flex-col items-center justify-center p-3 sm:p-4 rounded-xl border-2 border-gray-200 bg-white text-sm font-bold text-gray-600 peer-checked:border-indigo-600 peer-checked:bg-indigo-50 peer-checked:text-indigo-700 group-hover:border-gray-300 group-hover:bg-gray-50 transition">
                   <svg class="w-5 h-5 mb-1.5 text-gray-400 peer-checked:text-indigo-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
                   </svg>
@@ -42,11 +42,11 @@
         <p class="text-xs text-gray-400 mt-2">Podes guardar a matricula no teu perfil para preenchimento automatico.</p>
       </div>
 
-      <div class="flex gap-3 pt-2 border-t border-gray-100">
+      <div class="flex flex-col sm:flex-row gap-3 pt-2 border-t border-gray-100">
         <% if @available_spots.any? %>
-          <%= f.submit "Confirmar Reserva", class: "inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white text-sm font-semibold rounded-xl shadow-sm hover:bg-indigo-700 transition cursor-pointer" %>
+          <%= f.submit "Confirmar Reserva", class: "inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-indigo-600 text-white text-sm font-semibold rounded-xl shadow-sm hover:bg-indigo-700 transition cursor-pointer" %>
         <% end %>
-        <%= link_to "Cancelar", root_path, class: "inline-flex items-center px-5 py-2.5 bg-white text-gray-700 text-sm font-semibold rounded-xl border border-gray-300 shadow-sm hover:bg-gray-50 transition" %>
+        <%= link_to "Cancelar", root_path, class: "inline-flex items-center justify-center px-5 py-2.5 bg-white text-gray-700 text-sm font-semibold rounded-xl border border-gray-300 shadow-sm hover:bg-gray-50 transition" %>
       </div>
     <% end %>
   </div>

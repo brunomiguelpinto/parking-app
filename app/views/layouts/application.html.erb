@@ -3,6 +3,8 @@
   <head>
     <title><%= content_for(:title) || "Parking App" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -14,9 +16,12 @@
 
   <body class="h-full font-sans">
     <% if logged_in? %>
-      <div class="flex h-full">
+      <div class="flex h-full" data-controller="sidebar">
+        <%# === MOBILE OVERLAY === %>
+        <div data-sidebar-target="overlay" data-action="click->sidebar#close" class="hidden fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-40 lg:hidden"></div>
+
         <%# === SIDEBAR === %>
-        <aside class="w-64 bg-gray-900 text-white flex flex-col fixed inset-y-0 left-0 z-30">
+        <aside data-sidebar-target="sidebar" class="w-64 bg-gray-900 text-white flex flex-col fixed inset-y-0 left-0 z-50 transition-transform duration-300 -translate-x-full lg:translate-x-0">
           <%# Logo %>
           <div class="px-5 py-5 border-b border-gray-800">
             <div class="flex items-center gap-3">
@@ -25,10 +30,16 @@
                   <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
                 </svg>
               </div>
-              <div>
+              <div class="flex-1 min-w-0">
                 <div class="font-bold text-sm">Parking App</div>
                 <div class="text-[11px] text-gray-400">Reserva de lugares</div>
               </div>
+              <%# Close button (mobile only) %>
+              <button data-action="sidebar#close" class="lg:hidden w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+              </button>
             </div>
           </div>
 
@@ -36,21 +47,21 @@
           <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
             <div class="text-[10px] font-semibold text-gray-500 uppercase tracking-wider px-3 mb-2">Menu</div>
 
-            <%= link_to root_path, class: "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition #{request.path == '/' ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800/50'}" do %>
+            <%= link_to root_path, data: { action: "click->sidebar#close" }, class: "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition #{request.path == '/' ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800/50'}" do %>
               <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
               </svg>
               Dashboard
             <% end %>
 
-            <%= link_to new_reservation_path, class: "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition #{request.path.include?('reservations/new') ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800/50'}" do %>
+            <%= link_to new_reservation_path, data: { action: "click->sidebar#close" }, class: "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition #{request.path.include?('reservations/new') ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800/50'}" do %>
               <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
               </svg>
               Nova Reserva
             <% end %>
 
-            <%= link_to edit_profile_path, class: "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition #{request.path.include?('profile') ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800/50'}" do %>
+            <%= link_to edit_profile_path, data: { action: "click->sidebar#close" }, class: "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition #{request.path.include?('profile') ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800/50'}" do %>
               <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
               </svg>
@@ -60,21 +71,21 @@
             <% if admin? %>
               <div class="text-[10px] font-semibold text-gray-500 uppercase tracking-wider px-3 mt-6 mb-2">Administracao</div>
 
-              <%= link_to admin_parking_spots_path, class: "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition #{request.path.include?('parking_spots') ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800/50'}" do %>
+              <%= link_to admin_parking_spots_path, data: { action: "click->sidebar#close" }, class: "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition #{request.path.include?('parking_spots') ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800/50'}" do %>
                 <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25a2.25 2.25 0 0 1-2.25-2.25v-2.25Z" />
                 </svg>
                 Lugares
               <% end %>
 
-              <%= link_to admin_users_path, class: "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition #{request.path.include?('admin/users') ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800/50'}" do %>
+              <%= link_to admin_users_path, data: { action: "click->sidebar#close" }, class: "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition #{request.path.include?('admin/users') ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800/50'}" do %>
                 <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
                 </svg>
                 Utilizadores
               <% end %>
 
-              <%= link_to admin_reservations_path, class: "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition #{request.path.include?('admin/reservations') ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800/50'}" do %>
+              <%= link_to admin_reservations_path, data: { action: "click->sidebar#close" }, class: "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition #{request.path.include?('admin/reservations') ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800/50'}" do %>
                 <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                 </svg>
@@ -104,19 +115,25 @@
         </aside>
 
         <%# === MAIN CONTENT === %>
-        <main class="flex-1 ml-64 min-h-screen">
+        <main class="flex-1 lg:ml-64 min-h-screen">
           <%# Top Bar %>
           <header class="sticky top-0 z-20 bg-white/80 backdrop-blur-sm border-b border-gray-200">
-            <div class="px-8 py-4 flex items-center justify-between">
-              <h2 class="text-lg font-semibold text-gray-900"><%= yield(:page_heading) %></h2>
-              <div class="text-sm text-gray-500">
+            <div class="px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between gap-3">
+              <%# Hamburger (mobile only) %>
+              <button data-action="sidebar#open" class="lg:hidden w-10 h-10 flex items-center justify-center -ml-2 rounded-xl text-gray-600 hover:bg-gray-100 transition">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+              </button>
+              <h2 class="text-lg font-semibold text-gray-900 truncate"><%= yield(:page_heading) %></h2>
+              <div class="text-sm text-gray-500 hidden sm:block shrink-0">
                 <%= Date.current.strftime("%A, %d de %B %Y") %>
               </div>
             </div>
           </header>
 
           <%# Flash Messages %>
-          <div class="px-8 pt-6">
+          <div class="px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
             <% if notice %>
               <div class="mb-4 flex items-center gap-3 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-sm font-medium">
                 <svg class="w-5 h-5 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -136,7 +153,7 @@
           </div>
 
           <%# Page Content %>
-          <div class="px-8 pb-8">
+          <div class="px-4 sm:px-6 lg:px-8 pb-8">
             <%= yield %>
           </div>
         </main>
