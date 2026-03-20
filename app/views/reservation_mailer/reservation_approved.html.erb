@@ -1,0 +1,31 @@
+<div style="font-family: 'Inter', -apple-system, sans-serif; max-width: 480px; margin: 0 auto; padding: 24px;">
+  <div style="background: #059669; border-radius: 16px; padding: 24px; text-align: center; margin-bottom: 24px;">
+    <h1 style="color: #ffffff; font-size: 18px; margin: 0;">Reserva Aprovada</h1>
+  </div>
+
+  <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 24px; margin-bottom: 16px;">
+    <p style="color: #374151; font-size: 14px; margin: 0 0 16px;">
+      Ola <strong><%= @user.name %></strong>, a tua reserva foi aprovada!
+    </p>
+
+    <div style="background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 12px; padding: 16px; text-align: center; margin-bottom: 16px;">
+      <p style="color: #065f46; font-size: 12px; margin: 0 0 4px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Lugar Confirmado</p>
+      <p style="color: #065f46; font-size: 28px; font-weight: 800; margin: 0;"><%= @spot.name %></p>
+    </div>
+
+    <table style="width: 100%; border-collapse: collapse;">
+      <tr>
+        <td style="padding: 8px 0; color: #6b7280; font-size: 13px; border-bottom: 1px solid #f3f4f6;">Data</td>
+        <td style="padding: 8px 0; color: #111827; font-size: 13px; font-weight: 600; text-align: right; border-bottom: 1px solid #f3f4f6;"><%= @reservation.date.strftime("%d/%m/%Y") %></td>
+      </tr>
+      <tr>
+        <td style="padding: 8px 0; color: #6b7280; font-size: 13px;">Matricula</td>
+        <td style="padding: 8px 0; color: #111827; font-size: 13px; font-weight: 600; font-family: monospace; text-align: right;"><%= @reservation.license_plate %></td>
+      </tr>
+    </table>
+  </div>
+
+  <p style="color: #9ca3af; font-size: 11px; text-align: center; margin-top: 24px;">
+    Parking App - Reserva de Lugares
+  </p>
+</div>

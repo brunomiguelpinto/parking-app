@@ -8,12 +8,14 @@ module Admin
     def approve
       reservation = Reservation.find(params[:id])
       reservation.approved!
+      ReservationMailer.reservation_approved(reservation).deliver_later
       redirect_to admin_reservations_path, notice: "Reserva aprovada."
     end
 
     def reject
       reservation = Reservation.find(params[:id])
       reservation.rejected!
+      ReservationMailer.reservation_rejected(reservation).deliver_later
       redirect_to admin_reservations_path, notice: "Reserva rejeitada."
     end
   end
